@@ -2,14 +2,14 @@
 
 /*
  * 原始 : hahaha
- * 維護 : 
- * 指揮 : 
- * ---------------------------------------------------------------------------- 
+ * 維護 :
+ * 指揮 :
+ * ----------------------------------------------------------------------------
  * 決定 : name
  * ----------------------------------------------------------------------------
- * 說明 : 
- * ----------------------------------------------------------------------------   
-    
+ * 說明 :
+ * ----------------------------------------------------------------------------
+
  * ----------------------------------------------------------------------------
 
 */
@@ -20,9 +20,9 @@ use g_plib\db\table\hahaha_generate_php_const_key as key;
 // use g_plib\db\table\hahaha_generate_php_const_key as generate_php_const_key;
 
 /*
- --------------------------------------------------------------- 
+ ---------------------------------------------------------------
 輸出 - php 字串
- --------------------------------------------------------------- 
+ ---------------------------------------------------------------
 <?php
 
 namespace xxx
@@ -32,28 +32,28 @@ class xxx
     const XXX = "xxx";
     const DDD = "ddd";
 }
- --------------------------------------------------------------- 
+ ---------------------------------------------------------------
 */
 
 /*
- ----------------------------------------------------------- 
+ -----------------------------------------------------------
 參數用法
- ----------------------------------------------------------- 
+ -----------------------------------------------------------
 基本上盡量簡潔，所以用法請看範例
 大概是範例貼上去，改一改就可以用了
- ----------------------------------------------------------- 
+ -----------------------------------------------------------
 目前沒有提供完整範例，可能看我用的地方怎樣使用
- ----------------------------------------------------------- 
+ -----------------------------------------------------------
 */
 class hahaha_generate_php_const
 {
 	use \hahahalib\hahaha_instance_trait;
-    
+
     public $Ip_;
     public $Port_;
 	public $User_Name_;
     public $Password_;
-	
+
     //-----------------------------------------------------------
     public function Initial()
     {
@@ -78,23 +78,23 @@ class hahaha_generate_php_const
     //-----------------------------------------------------------
     public function Generate_Table(&$tables, &$database, &$output_path, &$output_namespace = "", $doctrine_style = false, &$pass_tables = ["migrates"])
     {
-        if(!is_dir($output_path)) 
+        if(!is_dir($output_path))
         {
             mkdir($output_path, 0777, true);
         }
 
         $tables_ = &$tables;
 
-        foreach ($tables_ as $key => &$table) 
+        foreach ($tables_ as $key => &$table)
         {
             $table_name = trim($table);
             if (in_array($table, $pass_tables)) {
                 unset($tables_[$key]);
-            } 
+            }
             else if (empty($table_name)) {
                 unset($tables_[$key]);
-            }        
-        } 
+            }
+        }
 
         $text = [];
         if($doctrine_style)
@@ -102,31 +102,31 @@ class hahaha_generate_php_const
             $name = str_replace(['_', '-'], [' ', ' '], $database);
             $name = ucwords($name);
             $name = str_replace([' ', '_', '-'], ['', '', ''], $name);
-            
+
         }
         else
         {
             $name = $database;
         }
-        
-        $this->Generate_PHP_Const($text, $tables_, $output_namespace, $name); 
-        
+
+        $this->Generate_PHP_Const($text, $tables_, $output_namespace, $name);
+
         // 寫檔
         $filename_ = $output_path . "/" . $name . ".php";
         $output_content_ = implode("\r\n", $text);
         file_put_contents($filename_ , $output_content_);
-        
+
     }
 
     public function Generate_Table_From_String(&$content, &$database, &$output_path, &$output_namespace = "", $doctrine_style = false, &$pass_tables = ["migrates"])
     {
         $tables_ = preg_split('/\n|\r\n?\s*/', $content);
 
-        $this->Generate_Table($tables_, 
-            $database, 
-            $output_path, 
-            $output_namespace, 
-            $doctrine_style, 
+        $this->Generate_Table($tables_,
+            $database,
+            $output_path,
+            $output_namespace,
+            $doctrine_style,
             $pass_tables
         );
 
@@ -136,18 +136,18 @@ class hahaha_generate_php_const
     /*
     // 保留字先在前面加_，ex. class use
     // 因為class & db是死的，不做彈性設計
-    
+
     // content textarea string => array
     */
-    // --------------------------------------------- 
+    // ---------------------------------------------
     // 基本
-    // --------------------------------------------- 
-    
-    // --------------------------------------------- 
-    
-    // --------------------------------------------- 
+    // ---------------------------------------------
+
+    // ---------------------------------------------
+
+    // ---------------------------------------------
     // 設計
-    // --------------------------------------------- 
+    // ---------------------------------------------
     // $config_output_ = &$config_generate_table_field_[key::OUTPUT];
     // $parameters_ = [
     //     // 輸出
@@ -249,14 +249,14 @@ class hahaha_generate_php_const
     //     $database_,
     //     $parameters_
     // );
-    // --------------------------------------------- 
+    // ---------------------------------------------
 
-    // --------------------------------------------- 
+    // ---------------------------------------------
     // demo
-    // --------------------------------------------- 
+    // ---------------------------------------------
 
-    // --------------------------------------------- 
-        
+    // ---------------------------------------------
+
     public function Generate_Table_Custom(&$tables, &$database, &$parameters = [])
     {
         $output_ = &$parameters[key::OUTPUT];
@@ -278,10 +278,10 @@ class hahaha_generate_php_const
         $db_hahaha->Close();
         // ---------------------------------------------------
         $tables_temp_ = [];
-        foreach ($tables as $key => &$table) 
+        foreach ($tables as $key => &$table)
         {
-            foreach ($table_items_ as $key_table_item => &$table_item) 
-            {   
+            foreach ($table_items_ as $key_table_item => &$table_item)
+            {
                 if($table_item["TABLE_NAME"] == $table)
                 {
                     $tables_temp_[] = [
@@ -291,108 +291,108 @@ class hahaha_generate_php_const
                     ];
                     break;
                 }
-                
-            } 
-        }
-        
 
-        if(!is_dir($output_[key::PATH])) 
+            }
+        }
+
+
+        if(!is_dir($output_[key::PATH]))
         {
             mkdir($output_[key::PATH], 0777, true);
         }
 
         $tables_ = &$tables_temp_;
 
-        // ----------------------------- 
+        // -----------------------------
         // 過濾
-        // ----------------------------- 
-        foreach ($tables_ as $key => &$table) 
+        // -----------------------------
+        foreach ($tables_ as $key => &$table)
         {
             $table_name = trim($table[key::NAME]);
             if (in_array($table_name, $pass_[key::TABLES])) {
                 unset($tables_[$key]);
-            } 
+            }
             else if (empty($table_name)) {
                 unset($tables_[$key]);
-            }        
-        } 
+            }
+        }
 
-        // ----------------------------- 
+        // -----------------------------
         // 分類
-        // ----------------------------- 
+        // -----------------------------
         // fields
-        $fields_ = []; 
+        $fields_ = [];
 
         // fields_class
         $fields_class_ = [];
-        foreach ($tables_ as $key_table => &$table) 
+        foreach ($tables_ as $key_table => &$table)
         {
             $is_class = false;
-            foreach ($classes_ as $key_class => &$class) 
+            foreach ($classes_ as $key_class => &$class)
             {
                 $pos_ = strpos($table[key::NAME], $class);
 
-                if($pos_ === 0) 
+                if($pos_ === 0)
                 {
                     // 找到分類
                     if(empty($fields_class_[$class]))
                     {
                         $fields_class_[$class] = [];
-                    } 
+                    }
 
-                    // 
+                    //
                     $fields_class_[$class][] = &$table;
                     $is_class = true;
                     break;
                 }
             }
-            
+
             if(!$is_class)
             {
                 $fields_[] = &$table;
             }
         }
 
-        
-        // ----------------------------- 
+
+        // -----------------------------
         // style
-        // ----------------------------- 
+        // -----------------------------
         $text = [];
-        
+
         // 替換名子
-        if(!empty($output_[key::CLASS_][key::NAME]) ) 
+        if(!empty($output_[key::CLASS_][key::NAME]) )
         {
             $name_ = $output_[key::CLASS_][key::NAME];
-        } 
+        }
         else
         {
             $name_ = $database;
         }
 
         // 樣式處理
-        if($output_[key::CLASS_][key::STYLE] == key::_) 
+        if($output_[key::CLASS_][key::STYLE] == key::_)
         {
             $name_ = str_replace([' ', '_', '-'], ['_', '_', '_'], $name_);
         }
-        else if($output_[key::CLASS_][key::STYLE] == key::PSR) 
+        else if($output_[key::CLASS_][key::STYLE] == key::PSR)
         {
             $name_ = str_replace(['_', '-'], [' ', ' '], $name_);
             $name_ = ucwords($name_);
             $name_ = str_replace([' ', '_', '-'], ['', '', ''], $name_);
         }
 
-        // ----------------------------- 
+        // -----------------------------
         // fast_use
-        // ----------------------------- 
+        // -----------------------------
         $fast_use_strings_ = [];
-        foreach ($fast_uses_ as $key_fast_use => &$fast_use) 
+        foreach ($fast_uses_ as $key_fast_use => &$fast_use)
         {
             $temp_ = "";
             $first_ = true;
             // 前綴
-            foreach ($fast_use[key::PREFIX] as $key_prefix => &$prefix) 
+            foreach ($fast_use[key::PREFIX] as $key_prefix => &$prefix)
             {
-                if($output_[key::CLASS_][key::STYLE] == key::_) 
+                if($output_[key::CLASS_][key::STYLE] == key::_)
                 {
                     if($first_)
                     {
@@ -404,7 +404,7 @@ class hahaha_generate_php_const
                         $temp_ .= key::_ . $prefix;
                     }
                 }
-                else if($output_[key::CLASS_][key::STYLE] == key::PSR) 
+                else if($output_[key::CLASS_][key::STYLE] == key::PSR)
                 {
                     if($first_)
                     {
@@ -418,7 +418,7 @@ class hahaha_generate_php_const
                 }
             }
             // 主要
-            if($output_[key::CLASS_][key::STYLE] == key::_) 
+            if($output_[key::CLASS_][key::STYLE] == key::_)
             {
                 if($first_)
                 {
@@ -430,7 +430,7 @@ class hahaha_generate_php_const
                     $temp_ .= key::_ . $name_;
                 }
             }
-            else if($output_[key::CLASS_][key::STYLE] == key::PSR) 
+            else if($output_[key::CLASS_][key::STYLE] == key::PSR)
             {
                 if($first_)
                 {
@@ -443,9 +443,9 @@ class hahaha_generate_php_const
                 }
             }
             // 後綴
-            foreach ($fast_use[key::POSTFIX] as $key_postfix => &$postfix) 
+            foreach ($fast_use[key::POSTFIX] as $key_postfix => &$postfix)
             {
-                if($output_[key::CLASS_][key::STYLE] == key::_) 
+                if($output_[key::CLASS_][key::STYLE] == key::_)
                 {
                     if($first_)
                     {
@@ -457,7 +457,7 @@ class hahaha_generate_php_const
                         $temp_ .= key::_ . $postfix;
                     }
                 }
-                else if($output_[key::CLASS_][key::STYLE] == key::PSR) 
+                else if($output_[key::CLASS_][key::STYLE] == key::PSR)
                 {
                     if($first_)
                     {
@@ -473,12 +473,12 @@ class hahaha_generate_php_const
 
             // 存入
             $fast_use_strings_[] = &$temp_;
-            unset($temp_); 
+            unset($temp_);
         }
 
-        // ----------------------------- 
+        // -----------------------------
         // 處理
-        // ----------------------------- 
+        // -----------------------------
         $settings_ = [
             key::NAMESPACE_ => &$output_[key::NAMESPACE_],
             key::CLASS_ => &$name_,
@@ -488,19 +488,19 @@ class hahaha_generate_php_const
             key::FAST_USES => &$fast_use_strings_,
             key::COMMENTS => &$comments_,
         ];
-        
-        $this->Generate_PHP_Const_Custom($text, $settings_, $parameters); 
+
+        $this->Generate_PHP_Const_Custom($text, $settings_, $parameters);
         // 寫檔
         $filename_ = $output_[key::PATH] . "/" . $name_ . ".php";
         $output_content_ = implode("\r\n", $text);
         file_put_contents($filename_ , $output_content_);
-        
+
     }
 
     public function Generate_Table_Custom_From_String(&$content, &$database, &$parameters = [])
     {
         $tables_ = preg_split('/\n|\r\n?\s*/', $content);
- 
+
         $this->Generate_Table_Custom($tables_, $database, $parameters);
 
     }
@@ -508,14 +508,14 @@ class hahaha_generate_php_const
     //-----------------------------------------------------------
     public function Generate_Table_Field(&$tables, &$database, &$output_path, &$output_namespace = "", $doctrine_style = false, &$pass_tables = ["migrates"])
     {
-        if(!is_dir($output_path)) 
+        if(!is_dir($output_path))
         {
             mkdir($output_path, 0777, true);
         }
 
         $tables_ = &$tables;
 
-        foreach ($tables_ as $key => &$table) 
+        foreach ($tables_ as $key => &$table)
         {
             $table_name = trim($table);
             if (empty($table_name)) {
@@ -537,14 +537,16 @@ class hahaha_generate_php_const
             $db_hahaha->Close();
             // ---------------------------------------------------
             $fields_ = [];
-            foreach ($table_fields as $key => &$fields) 
+            foreach ($table_fields as $key => &$fields)
             {
-                foreach ($fields as $key_item => &$item) 
+                foreach ($fields as $key_item => &$item)
                 {
-                    $fields_[] = [
-                        key::NAME => &$fields["COLUMN_NAME"],
-                        key::COMMENT => &$fields["COLUMN_COMMENT"],
-                    ];
+                    // $fields_[] = [
+                    //     key::NAME => &$fields["COLUMN_NAME"],
+                    //     key::COMMENT => &$fields["COLUMN_COMMENT"],
+                    // ];
+                    $fields_[] = $fields["COLUMN_NAME"];
+                    break;
                 }
             }
 
@@ -554,52 +556,52 @@ class hahaha_generate_php_const
                 $name = str_replace(['_', '-'], [' ', ' '], $table);
                 $name = ucwords($name);
                 $name = str_replace([' ', '_', '-'], ['', '', ''], $name);
-                
+
             }
             else
             {
                 $name = $table;
             }
-            
-            $this->Generate_PHP_Const($text, $fields_, $output_namespace, $name); 
+
+            $this->Generate_PHP_Const($text, $fields_, $output_namespace, $name);
             // 寫檔
             $filename_ = $output_path . "/" . $name . ".php";
             $output_content_ = implode("\r\n", $text);
             file_put_contents($filename_ , $output_content_);
-        } 
-        
+        }
+
     }
 
     public function Generate_Table_Field_From_String(&$content, &$database, &$output_path, &$output_namespace = "", $doctrine_style = false, &$pass_tables = ["migrates"])
     {
         $tables_ = preg_split('/\n|\r\n?\s*/', $content);
 
-        $this->Generate_Table_Field($tables_, 
-            $database, 
-            $output_path, 
-            $output_namespace, 
-            $doctrine_style, 
+        $this->Generate_Table_Field($tables_,
+            $database,
+            $output_path,
+            $output_namespace,
+            $doctrine_style,
             $pass_tables
         );
 
     }
 
-    
+
     /*
     // 保留字先在前面加_，ex. class use
     // 因為class & db是死的，不做彈性設計
-    
+
     // content textarea string => array
     */
-    // --------------------------------------------- 
+    // ---------------------------------------------
     // 基本
-    // --------------------------------------------- 
-    
-    // --------------------------------------------- 
-    
-    // --------------------------------------------- 
+    // ---------------------------------------------
+
+    // ---------------------------------------------
+
+    // ---------------------------------------------
     // 設計
-    // --------------------------------------------- 
+    // ---------------------------------------------
     // $config_output_ = &$config_generate_table_field_[key::OUTPUT];
     // $parameters_ = [
     //     // 輸出
@@ -695,14 +697,14 @@ class hahaha_generate_php_const
     //     $database_,
     //     $parameters_
     // );
-    // --------------------------------------------- 
+    // ---------------------------------------------
 
-    // --------------------------------------------- 
+    // ---------------------------------------------
     // demo
-    // --------------------------------------------- 
+    // ---------------------------------------------
 
-    // --------------------------------------------- 
-    
+    // ---------------------------------------------
+
     public function Generate_Table_Field_Custom(&$tables, &$database, &$parameters = [])
     {
         $output_ = &$parameters[key::OUTPUT];
@@ -710,7 +712,7 @@ class hahaha_generate_php_const
         $fast_uses_ = &$parameters[key::FAST_USES];
         $comments_ = &$parameters[key::COMMENTS];
         $const_ = [];
-        if(!is_dir($output_[key::PATH])) 
+        if(!is_dir($output_[key::PATH]))
         {
             mkdir($output_[key::PATH], 0777, true);
         }
@@ -719,19 +721,19 @@ class hahaha_generate_php_const
 
         $fast_use_strings_all_ = [];
 
-        // ----------------------------- 
+        // -----------------------------
         // 過濾
-        // ----------------------------- 
-        foreach ($tables_ as $key => &$table) 
+        // -----------------------------
+        foreach ($tables_ as $key => &$table)
         {
             $table_name = trim($table);
             if (in_array($table, $pass_[key::TABLES])) {
                 unset($tables_[$key]);
-            } 
+            }
             else if (empty($table_name)) {
                 unset($tables_[$key]);
-            }        
-        } 
+            }
+        }
 
         foreach ($tables_ as $key => &$table) {
             $table_name = trim($table);
@@ -773,38 +775,38 @@ class hahaha_generate_php_const
             // fields
             $fields_ = &$fields_temp_;
 
-            // ----------------------------- 
+            // -----------------------------
             // style
-            // ----------------------------- 
+            // -----------------------------
             $text = [];
-            
+
             // 替換名子
             $name_ = $table;
 
             // 樣式處理
-            if($output_[key::CLASS_][key::STYLE] == key::_) 
+            if($output_[key::CLASS_][key::STYLE] == key::_)
             {
                 $name_ = str_replace([' ', '_', '-'], ['_', '_', '_'], $name_);
             }
-            else if($output_[key::CLASS_][key::STYLE] == key::PSR) 
+            else if($output_[key::CLASS_][key::STYLE] == key::PSR)
             {
                 $name_ = str_replace(['_', '-'], [' ', ' '], $name_);
                 $name_ = ucwords($name_);
                 $name_ = str_replace([' ', '_', '-'], ['', '', ''], $name_);
             }
             $const_[] = $name_;
-            // ----------------------------- 
+            // -----------------------------
             // fast_use
-            // ----------------------------- 
+            // -----------------------------
             $fast_use_strings_ = [];
-            foreach ($fast_uses_ as $key_fast_use => &$fast_use) 
+            foreach ($fast_uses_ as $key_fast_use => &$fast_use)
             {
                 $temp_ = "";
                 $first_ = true;
                 // 前綴
-                foreach ($fast_use[key::PREFIX] as $key_prefix => &$prefix) 
+                foreach ($fast_use[key::PREFIX] as $key_prefix => &$prefix)
                 {
-                    if($output_[key::CLASS_][key::STYLE] == key::_) 
+                    if($output_[key::CLASS_][key::STYLE] == key::_)
                     {
                         if($first_)
                         {
@@ -816,7 +818,7 @@ class hahaha_generate_php_const
                             $temp_ .= key::_ . $prefix;
                         }
                     }
-                    else if($output_[key::CLASS_][key::STYLE] == key::PSR) 
+                    else if($output_[key::CLASS_][key::STYLE] == key::PSR)
                     {
                         if($first_)
                         {
@@ -830,11 +832,11 @@ class hahaha_generate_php_const
                     }
                 }
                 // 主要
-                if($output_[key::CLASS_][key::STYLE] == key::_) 
+                if($output_[key::CLASS_][key::STYLE] == key::_)
                 {
                     if($first_)
                     {
-                        $first_ = false; 
+                        $first_ = false;
                         $temp_ .= $name_;
                     }
                     else
@@ -842,7 +844,7 @@ class hahaha_generate_php_const
                         $temp_ .= key::_ . $name_;
                     }
                 }
-                else if($output_[key::CLASS_][key::STYLE] == key::PSR) 
+                else if($output_[key::CLASS_][key::STYLE] == key::PSR)
                 {
                     if($first_)
                     {
@@ -855,9 +857,9 @@ class hahaha_generate_php_const
                     }
                 }
                 // 後綴
-                foreach ($fast_use[key::POSTFIX] as $key_postfix => &$postfix) 
+                foreach ($fast_use[key::POSTFIX] as $key_postfix => &$postfix)
                 {
-                    if($output_[key::CLASS_][key::STYLE] == key::_) 
+                    if($output_[key::CLASS_][key::STYLE] == key::_)
                     {
                         if($first_)
                         {
@@ -869,7 +871,7 @@ class hahaha_generate_php_const
                             $temp_ .= key::_ . $postfix;
                         }
                     }
-                    else if($output_[key::CLASS_][key::STYLE] == key::PSR) 
+                    else if($output_[key::CLASS_][key::STYLE] == key::PSR)
                     {
                         if($first_)
                         {
@@ -887,12 +889,12 @@ class hahaha_generate_php_const
                 $fast_use_strings_[] = &$temp_;
 
                 $fast_use_strings_all_[$key_fast_use][] = &$temp_;
-                unset($temp_); 
+                unset($temp_);
             }
-            
-            // ----------------------------- 
+
+            // -----------------------------
             // 處理
-            // ----------------------------- 
+            // -----------------------------
             $settings_ = [
                 key::NAMESPACE_ => &$output_[key::NAMESPACE_],
                 key::CLASS_ => &$name_,
@@ -901,28 +903,28 @@ class hahaha_generate_php_const
                 key::COMMENTS => &$comments_,
                 key::CONST_ => $const_,
             ];
-            
-            $this->Generate_PHP_Const_Custom($text, $settings_, $parameters); 
+
+            $this->Generate_PHP_Const_Custom($text, $settings_, $parameters);
             // 寫檔
             $filename_ = $output_[key::PATH] . "/" . $name_ . ".php";
             $output_content_ = implode("\r\n", $text);
             file_put_contents($filename_ , $output_content_);
 
-            // ------------------------------------------------------ 
+            // ------------------------------------------------------
 
-        } 
+        }
 
 
-        // ---------------------------------------------------------- 
+        // ----------------------------------------------------------
         $text = [];
         $settings_[key::FAST_USES_ALL] = &$fast_use_strings_all_;
 
-        $this->Generate_Include_All($text, $settings_, $parameters); 
+        $this->Generate_Include_All($text, $settings_, $parameters);
         // 寫檔
         $filename_ = $output_[key::PATH] . "/" . "include_all";
         $output_content_ = implode("\r\n", $text);
         file_put_contents($filename_ , $output_content_);
-        
+
     }
 
     public function Generate_Table_Field_Custom_From_String(&$content, &$database, &$parameters = [])
@@ -934,7 +936,7 @@ class hahaha_generate_php_const
     }
 
     //-----------------------------------------------------------
-    public function Generate_PHP_Const(&$text, &$fields_, &$namespace, &$class) 
+    public function Generate_PHP_Const(&$text, &$fields_, &$namespace, &$class)
     {
         // 因為產生器不會做得很複雜 & 需要一直改，所以可以簡單寫
         // 大的才要做特別整理
@@ -942,14 +944,24 @@ class hahaha_generate_php_const
         $text[] = "";
         $text[] = "namespace {$namespace};";
         $text[] = "";
+        $text[] = "/*";
+        $text[] = "";
+        if(empty($namespace)) {
+            $text[] = "use {$class} as {$class};";
+        } else {
+            $text[] = "use {$namespace}\\{$class} as {$class};";
+        }
+        $text[] = "";
+        $text[] = "*/";
+        $text[] = "";
         $text[] = "class {$class}";
         $text[] = "{";
         // $text[] = "";
-        foreach ($fields_ as $key => &$field) 
+        foreach ($fields_ as $key => &$field)
         {
             $const = trim( strtoupper($field) );
             $const = str_replace([" ", "-"], ["_", "_"], $const);
-            $text[] = "\tconst {$const} = \"{trim($field)}\";";
+            $text[] = "\tconst {$const} = \"" . trim($field) . "\";";
         }
         $text[] = "";
         $text[] = "} ";
@@ -957,7 +969,7 @@ class hahaha_generate_php_const
 
     }
 
-    public function Generate_PHP_Const_Custom(&$text, &$settings, &$parameters) 
+    public function Generate_PHP_Const_Custom(&$text, &$settings, &$parameters)
     {
         $fast_uses_ = &$settings[key::FAST_USES];
         $comments_ = &$settings[key::COMMENTS];
@@ -975,7 +987,7 @@ class hahaha_generate_php_const
             $replace_from_ = array_keys($replace_fields_);
             $replace_to_ = array_values($replace_fields_);
             $is_replace_field_ = true;
-        }        
+        }
         //
 
         // 因為產生器不會做得很複雜 & 需要一直改，所以可以簡單寫
@@ -988,55 +1000,60 @@ class hahaha_generate_php_const
         if(!empty($fast_uses_))
         {
             $text[] = "/*";
-            foreach ($fast_uses_ as $key => &$fast_use) 
+            foreach ($fast_uses_ as $key => &$fast_use)
             {
-                $text[] = "use {$settings[key::NAMESPACE_]}\\{$settings[key::CLASS_]} as {$fast_use};";
-                $text[] = "";
+                if(empty($settings[key::NAMESPACE_])) {
+                    $text[] = "use {$settings[key::CLASS_]} as {$fast_use};";
+                    $text[] = "";
+                } else {
+                    $text[] = "use {$settings[key::NAMESPACE_]}\\{$settings[key::CLASS_]} as {$fast_use};";
+                    $text[] = "";
+                }
             }
             $text[] = "*/";
         }
         $text[] = "";
-        
+
         // comments_namespace
         if(!empty($comments_namespace_))
         {
-            foreach ($comments_namespace_ as $key => &$comment) 
+            foreach ($comments_namespace_ as $key => &$comment)
             {
                 $text[] = "{$comment}";
             }
         }
         $text[] = "";
-        
+
         // comments_class
         if(!empty($comments_class_))
         {
-            foreach ($comments_class_ as $key => &$comment) 
+            foreach ($comments_class_ as $key => &$comment)
             {
                 $text[] = "{$comment}";
             }
         }
-        
+
         //
         $text[] = "class {$settings[key::CLASS_]}";
         $text[] = "{";
         // comments_const
-        if(!empty($comments_const_)) 
+        if(!empty($comments_const_))
         {
             $text[] = "";
-            foreach ($comments_const_ as $key => &$comment) 
+            foreach ($comments_const_ as $key => &$comment)
             {
                 $text[] = "\t{$comment}";
             }
             $text[] = "";
-        }         
+        }
         //
         if(!empty($classes_))
         {
-            foreach ($classes_ as $key => &$class) 
+            foreach ($classes_ as $key => &$class)
             {
-                if(!empty($comments_const_class_[key::_COMMENTS])) 
+                if(!empty($comments_const_class_[key::_COMMENTS]))
                 {
-                    foreach ($comments_const_class_[key::_COMMENTS] as $key_comment => &$comment) 
+                    foreach ($comments_const_class_[key::_COMMENTS] as $key_comment => &$comment)
                     {
                         $text[] = "\t{$comment}";
                     }
@@ -1044,50 +1061,50 @@ class hahaha_generate_php_const
                 }
                 if(!empty($comments_const_class_[$class]))
                 {
-                    foreach ($comments_const_class_[$class] as $key_comment => &$comment) 
+                    foreach ($comments_const_class_[$class] as $key_comment => &$comment)
                     {
                         $text[] = "\t{$comment}";
-                    }  
+                    }
                 }
-                if(!empty($settings[key::FIELDS_CLASS]) && !empty($settings[key::FIELDS_CLASS][$class]) ) 
+                if(!empty($settings[key::FIELDS_CLASS]) && !empty($settings[key::FIELDS_CLASS][$class]) )
                 {
-                    foreach ($settings[key::FIELDS_CLASS][$class] as $key_field => &$field) 
+                    foreach ($settings[key::FIELDS_CLASS][$class] as $key_field => &$field)
                     {
-                        // const 
+                        // const
                         $field_temp_ = $field[key::NAME];
-                        if($is_replace_field_) 
+                        if($is_replace_field_)
                         {
                             $field_temp_ = str_replace($replace_from_, $replace_to_, $field_temp_);
-                        }     
+                        }
                         $const = trim( strtoupper($field_temp_) );
                         $const = str_replace([" ", "-"], ["_", "_"], $const);
                         if(!empty($field[key::COMMENT]))
                         {
                             $text[] = "\t// {$field[key::COMMENT]}";
-                        }                   
+                        }
                         $text[] = "\tconst {$const} = \"{$field[key::NAME]}\";";
                     }
                 }
             }
-        }        
-        // 
+        }
+        //
         $text[] = "";
         // comments_const_const
-        if(!empty($comments_const_const_)) 
+        if(!empty($comments_const_const_))
         {
-            foreach ($comments_const_const_ as $key => &$comment) 
+            foreach ($comments_const_const_ as $key => &$comment)
             {
                 $text[] = "\t{$comment}";
             }
-        }        
+        }
         //
-        foreach ($settings[key::FIELDS] as $key => &$field) 
+        foreach ($settings[key::FIELDS] as $key => &$field)
         {
             $field_temp_ = $field[key::NAME];
-            if($is_replace_field_) 
+            if($is_replace_field_)
             {
                 $field_temp_ = str_replace($replace_from_, $replace_to_, $field_temp_);
-            }     
+            }
             $const = trim( strtoupper($field_temp_) );
             $const = str_replace([" ", "-"], ["_", "_"], $const);
             if(!empty($field[key::COMMENT]))
@@ -1102,7 +1119,7 @@ class hahaha_generate_php_const
 
     }
 
-    public function Generate_Include_All(&$text, &$settings, &$parameters) 
+    public function Generate_Include_All(&$text, &$settings, &$parameters)
     {
         $fast_uses_all_ = &$settings[key::FAST_USES_ALL];
         $comments_ = &$settings[key::COMMENTS];
@@ -1120,17 +1137,17 @@ class hahaha_generate_php_const
         // fast_use
         if(!empty($fast_uses_all_))
         {
-            foreach ($fast_uses_all_ as $key_fast_uses => &$fast_uses) 
+            foreach ($fast_uses_all_ as $key_fast_uses => &$fast_uses)
             {
                 $text[] = "/*";
-                foreach ($fast_uses as $key => &$fast_use) 
+                foreach ($fast_uses as $key => &$fast_use)
                 {
                     $text[] = "use {$settings[key::NAMESPACE_]}\\{$const_[$key]} as {$fast_use};";
                 }
                 $text[] = "*/";
                 $text[] = "";
             }
-            
+
         }
 
     }
@@ -1140,6 +1157,7 @@ class hahaha_generate_php_const
     //-----------------------------------------------------------
 
 
-  
+
 
 }
+
